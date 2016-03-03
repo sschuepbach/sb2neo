@@ -158,15 +158,15 @@ public class App {
 
     protected static Node merge(GraphDatabaseService g, Label l, String v, boolean a) {
         Node n;
-        //if ((n = g.findNode(l, "name", v)) == null) {
+        if ((n = g.findNode(l, "name", v)) == null) {
             LOG.trace("Node with label {} and property name={} not found, thus creating it.", l.toString(), v);
             n = g.createNode(l);
             n.setProperty("name", v);
             if (a)
                 n.setProperty("active", "true");
-        //} else {
-        //    LOG.trace("Node with label {} and property name={} already exists, thus leaving as is.", l.toString(), v);
-        //}
+        } else {
+            LOG.trace("Node with label {} and property name={} already exists, thus leaving as is.", l.toString(), v);
+        }
         return n;
     }
 
