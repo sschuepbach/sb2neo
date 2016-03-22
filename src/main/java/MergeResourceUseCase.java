@@ -12,7 +12,7 @@ import java.util.HashMap;
  *          <p>
  *          Created on 22.03.16
  */
-abstract public class MergeResourceUseCase extends ResourceUseCase{
+abstract public class MergeResourceUseCase extends ResourceUseCase {
 
     private final static Logger LOG = LoggerFactory.getLogger(App.class);
 
@@ -23,14 +23,16 @@ abstract public class MergeResourceUseCase extends ResourceUseCase{
             HashMap<String, String> p1 = new HashMap<>();
             p1.put("name", jsonVals.get("@id").get(0));
             Node brNode = nc.addNode(lsbLabels.BIBLIOGRAPHICRESOURCE, p1);
-            for (String v : jsonVals.get("dct:contributor")) {
-                Node brRef;
-                if (v.contains("person")) {
-                    brRef = nc.merge(lsbLabels.PERSON, "name", v);
-                } else {
-                    brRef = nc.merge(lsbLabels.ORGANISATION, "name", v);
+            if (jsonVals.containsKey("dct:contributor")) {
+                for (String v : jsonVals.get("dct:contributor")) {
+                    Node brRef;
+                    if (v.contains("person")) {
+                        brRef = nc.merge(lsbLabels.PERSON, "name", v);
+                    } else {
+                        brRef = nc.merge(lsbLabels.ORGANISATION, "name", v);
+                    }
+                    brRef.createRelationshipTo(brNode, lsbRelations.CONTRIBUTOR);
                 }
-                brRef.createRelationshipTo(brNode, lsbRelations.CONTRIBUTOR);
             }
         } catch (IOException e) {
             LOG.error("IO exception: {}", e);
