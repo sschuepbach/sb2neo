@@ -32,7 +32,7 @@ public class NeoConnect {
 
     public void setSchema(Label l, String p) {
         LOG.info("Setting index on property {} of label {}.", p, l.toString());
-        graphDb.schema().indexFor(l).on(p);
+        graphDb.schema().indexFor(l).on(p).create();
         tx.success();
         commit();
     }
@@ -105,7 +105,7 @@ public class NeoConnect {
             LOG.trace("Node with label {} and property {}:{} not found, thus creating it.", l.toString(), pK, pV);
             HashMap<String, String> p = new HashMap<>();
             p.put(pK, pV);
-            addNode(l, p);
+            n = addNode(l, p);
         } else {
             LOG.trace("Node with label {} and property {}:{} already exists, thus leaving as is.", l.toString(), pK, pV);
         }
